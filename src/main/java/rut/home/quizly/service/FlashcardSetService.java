@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface FlashcardSetService {
 
-    List<FlashcardSet> allSets();
+    List<FlashcardSet> getAllSets();
 
+    Flashcard getCardById(int cardId);
+
+    FlashcardSet getSetById(int setId);
 }
