@@ -11,8 +11,8 @@
 	<groupId>rut.home</groupId>
 	<artifactId>home</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>Tournament Aggregator</name>
+	<description>Simple UNO tournament catalog</description>
 	<url/>
 	<licenses>
 		<license/>

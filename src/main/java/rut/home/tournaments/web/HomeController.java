@@ -1,4 +1,4 @@
-package rut.home.quizly.web;
+package rut.home.tournaments.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,6 @@ public class HomeController {
     @GetMapping(value = "/", produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String home() {
-        return "Страница карточек для обучения. Откройте /sets";
+        return "Турнирный агрегатор для игры UNO. Откройте /tournaments";
     }
-
 }

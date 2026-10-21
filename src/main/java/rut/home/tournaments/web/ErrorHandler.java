@@ -1,19 +1,19 @@
-package rut.home.quizly.web;
+package rut.home.tournaments.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import rut.home.quizly.service.exceptions.FlashcardsetNotFoundException;
+import rut.home.tournaments.service.exceptions.TournamentNotFoundException;
 
 @ControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(FlashcardsetNotFoundException.class)
+    @ExceptionHandler(TournamentNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String flashcardSetNotFound(FlashcardsetNotFoundException exception, Model model) {
+    public String tournamentNotFound(TournamentNotFoundException exception, Model model) {
         model.addAttribute("errorMessage", exception.getMessage());
-        return "error/flashcardSet-not-found";
+        return "error/tournament-not-found";
     }
 }
