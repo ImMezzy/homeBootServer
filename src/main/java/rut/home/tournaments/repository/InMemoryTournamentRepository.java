@@ -2,51 +2,48 @@ package rut.home.tournaments.repository;
 
 import org.springframework.stereotype.Repository;
 import rut.home.tournaments.model.Tournament;
+import rut.home.tournaments.service.exceptions.TournamentNotFoundException;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class InMemoryTournamentRepository implements TournamentRepository {
 
-    private final List<Tournament> tournaments = List.of(
+    private final List<Tournament> tournaments = new ArrayList<>(List.of(
             new Tournament(
-                    1,
                     "UNO Open Cup",
                     "Открытый турнир для начинающих и опытных игроков. Матчи проходят по классическим правилам UNO.",
-                    24,
                     32,
+                    24,
                     30000,
-                    "15 ноября 2026, 12:00",
+                    LocalDateTime.of(2026, 11, 15, 12, 0),
                     "Москва, игровой клуб «Точка»",
-                    "Личная игра, на выбывание",
-                    "Регистрация открыта"
+                    "На выбывание"
             ),
             new Tournament(
-                    2,
                     "Городской чемпионат UNO",
                     "Однодневный чемпионат с групповым этапом и финальной серией для лучших участников.",
-                    48,
                     64,
+                    48,
                     75000,
-                    "29 ноября 2026, 10:00",
+                    LocalDateTime.of(2026, 11, 29, 10, 0),
                     "Москва, молодёжный центр «Смена»",
-                    "Плей-офф",
-                    "Регистрация открыта"
+                    "На выбывание"
             ),
             new Tournament(
-                    3,
                     "Студенческая лига UNO",
                     "Вечерний турнир для студентов. Победитель получает кубок лиги и денежный приз.",
                     16,
                     16,
                     15000,
-                    "6 декабря 2026, 18:30",
+                    LocalDateTime.of(2026, 12, 6, 18, 30),
                     "Онлайн",
-                    "Круговая система",
-                    "Набор завершён"
+                    "Круговая система"
             )
-    );
+    ));
 
     @Override
     public List<Tournament> findAll() {
@@ -54,9 +51,32 @@ public class InMemoryTournamentRepository implements TournamentRepository {
     }
 
     @Override
-    public Optional<Tournament> findById(int id) {
+    public Optional<Tournament> findByName(String name) {
         return tournaments.stream()
-                .filter(tournament -> tournament.id() == id)
+                .filter(tournament -> tournament.title().equals(name))
                 .findFirst();
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return tournaments.stream()
+                .anyMatch(tournament -> tournament.title().equals(name));
+    }
+
+    @Override
+    public void add(Tournament tournament) {
+        tournaments.add(tournament);
+    }
+
+    @Override
+    public void update(String originalTitle, Tournament updatedTournament) {
+        for (int i = 0; i < tournaments.size(); i++) {
+            if (tournaments.get(i).title().equals(originalTitle)) {
+                tournaments.set(i, updatedTournament);
+                return;
+            }
+        }
+
+        throw new TournamentNotFoundException(originalTitle);
     }
 }

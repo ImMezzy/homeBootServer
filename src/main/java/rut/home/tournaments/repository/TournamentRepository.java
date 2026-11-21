@@ -9,5 +9,11 @@ public interface TournamentRepository {
 
     List<Tournament> findAll();
 
-    Optional<Tournament> findById(int id);
+    Optional<Tournament> findByName(String name);
+
+    boolean existsByName(String name);
+
+    void add(Tournament tournament);
+
+    void update(String originalTitle, Tournament updatedTournament);
 }

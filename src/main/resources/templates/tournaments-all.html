@@ -27,7 +27,7 @@
             </p>
             <p>
                 <strong>Дата и время:</strong>
-                <span th:text="${tournament.dateTime}">
+                <span th:text="${#temporals.format(tournament.dateTime, 'dd.MM.yyyy, HH:mm')}">
                     Дата проведения
                 </span>
             </p>
@@ -39,11 +39,11 @@
             </p>
             <p>
                 <strong>Статус:</strong>
-                <span th:text="${tournament.registrationStatus}">
+                <span th:text="${tournament.registrationStatus()}">
                     Статус регистрации
                 </span>
             </p>
-            <a th:href="@{/tournaments/{tournamentId}(tournamentId=${tournament.id})}">
+            <a th:href="@{/tournaments/details(name=${tournament.title})}">
                 Подробнее
             </a>
         </article>
