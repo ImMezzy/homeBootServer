@@ -10,6 +10,7 @@ import rut.home.tournaments.dto.AddTournamentDto;
 import rut.home.tournaments.model.Tournament;
 import rut.home.tournaments.repository.TournamentRepository;
 import rut.home.tournaments.service.TournamentService;
+import rut.home.tournaments.service.exceptions.ParticipantLimitException;
 
 @Controller
 @RequestMapping("/tournaments")
@@ -74,13 +75,13 @@ public class TournamentController {
         Tournament tournament = tournamentService.tournamentDetails(tournamentTitle);
         AddTournamentDto form = new AddTournamentDto();
         form.setTitle(tournament.title());
-        form.setDescription(tournament.description());
+//        form.setDescription(tournament.description());
         form.setMaxParticipants(tournament.maxParticipants());
-        form.setParticipantCount(tournament.participantCount());
+//        form.setParticipantCount(tournament.participantCount());
         form.setPrizeFund(tournament.prizeFund());
         form.setDateTime(tournament.dateTime());
         form.setLocation(tournament.location());
-        form.setFormat(tournament.format());
+//        form.setFormat(tournament.format());
         model.addAttribute("tournamentModel", form);
         prepareForm(model, true, tournamentTitle);
         return "tournament-add";
@@ -99,12 +100,37 @@ public class TournamentController {
             return "tournament-add";
         }
 
-        tournamentService.updateTournament(tournamentTitle, tournamentModel);
+        try {
+            tournamentService.updateTournament(tournamentTitle, tournamentModel);
+        } catch (ParticipantLimitException exception) {
+            bindingResult.rejectValue("maxParticipants", "participantLimit", exception.getMessage());
+            prepareForm(model, true, tournamentTitle);
+            return "tournament-add";
+        } catch (IllegalArgumentException exception) {
+            bindingResult.rejectValue(
+                    "title", "duplicate", exception.getMessage()
+            );
+            prepareForm(model, true, tournamentTitle);
+            return "tournament-add";
+        }
+
         redirectAttributes.addFlashAttribute(
                 "successMessage", "Турнир успешно изменён"
         );
-        redirectAttributes.addAttribute("tournamentTitle", tournamentModel.getTitle());
-        return "redirect:/tournaments/{tournamentTitle}";
+        redirectAttributes.addAttribute("name", tournamentModel.getTitle().trim());
+        return "redirect:/tournaments/details";
+    }
+
+    @PostMapping("/{tournamentTitle}/delete")
+    public String deleteTournament(
+            @PathVariable String tournamentTitle,
+            RedirectAttributes redirectAttributes
+    ) {
+        tournamentService.deleteTournament(tournamentTitle);
+        redirectAttributes.addFlashAttribute(
+                "successMessage", "Турнир удалён"
+        );
+        return "redirect:/tournaments";
     }
 
     @GetMapping

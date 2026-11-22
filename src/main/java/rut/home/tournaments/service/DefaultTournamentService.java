@@ -5,6 +5,7 @@ import rut.home.tournaments.dto.AddTournamentDto;
 import rut.home.tournaments.model.Tournament;
 import rut.home.tournaments.repository.TournamentRepository;
 import rut.home.tournaments.service.exceptions.TournamentNotFoundException;
+import rut.home.tournaments.service.exceptions.ParticipantLimitException;
 
 import java.util.List;
 
@@ -38,28 +39,32 @@ public class DefaultTournamentService implements TournamentService {
 
     @Override
     public void addTournament(AddTournamentDto source) {
-        String normalizedName = source.getTitle().trim();
-        if (tournamentRepository.existsByName(normalizedName)) {
+        String normalizedTitle = source.getTitle().trim();
+        if (tournamentRepository.existsByName(normalizedTitle)) {
             throw new IllegalArgumentException(
                     "Турнир с таким именем уже существует"
             );
         }
 
         tournamentRepository.add(new Tournament(
-                normalizedName,
-                source.getDescription(),
+                normalizedTitle,
+                "Новый турнир",
                 source.getMaxParticipants(),
-                source.getParticipantCount(),
+                0,
                 source.getPrizeFund(),
                 source.getDateTime(),
                 source.getLocation(),
-                source.getFormat()
+                "Стандарт"
         ));
     }
 
     @Override
     public void updateTournament(String tournamentTitle, AddTournamentDto source) {
-        getTournamentByName(tournamentTitle);
+        Tournament tournament = getTournamentByName(tournamentTitle);
+
+        if (source.getMaxParticipants() < tournament.participantCount()) {
+            throw new ParticipantLimitException();
+        }
 
         String normalizedTitle = source.getTitle().trim();
 
@@ -69,16 +74,21 @@ public class DefaultTournamentService implements TournamentService {
 
         Tournament updatedTournament = new Tournament(
                 normalizedTitle,
-                source.getDescription(),
+                tournament.description(),
                 source.getMaxParticipants(),
-                source.getParticipantCount(),
+                tournament.participantCount(),
                 source.getPrizeFund(),
                 source.getDateTime(),
                 source.getLocation(),
-                source.getFormat()
+                tournament.format()
         );
 
         tournamentRepository.update(tournamentTitle, updatedTournament);
+    }
+
+    @Override
+    public void deleteTournament(String title) {
+        tournamentRepository.delete(title);
     }
 
 }

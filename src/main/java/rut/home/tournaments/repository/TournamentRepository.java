@@ -9,11 +9,13 @@ public interface TournamentRepository {
 
     List<Tournament> findAll();
 
-    Optional<Tournament> findByName(String name);
+    Optional<Tournament> findByName(String title);
 
-    boolean existsByName(String name);
+    boolean existsByName(String title);
 
     void add(Tournament tournament);
 
     void update(String originalTitle, Tournament updatedTournament);
+
+    void delete(String title);
 }

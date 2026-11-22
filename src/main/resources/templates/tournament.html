@@ -51,6 +51,18 @@
     <a th:href="@{/tournaments}">
         Вернуться к списку турниров
     </a>
+    <a th:href="@{/tournaments/{title}/edit(title=${tournament.title})}">
+        Редактировать
+    </a>
+    <form th:action="@{/tournaments/{title}/delete(title=${tournament.title})}"
+          method="post">
+        <button type="submit">Удалить турнир</button>
+    </form>
+
+    <div th:if="${successMessage}"
+         th:text="${successMessage}"
+         role="status">
+    </div>
 </main>
 <footer th:replace="~{fragments/footer}"></footer>
 </body>

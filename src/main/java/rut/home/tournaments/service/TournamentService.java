@@ -17,4 +17,6 @@ public interface TournamentService {
     void addTournament(AddTournamentDto source);
 
     void updateTournament(String tournamentTitle, AddTournamentDto source);
+
+    void deleteTournament(String title);
 }

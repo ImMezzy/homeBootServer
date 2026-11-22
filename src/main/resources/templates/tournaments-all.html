@@ -48,9 +48,19 @@
             </a>
         </article>
     </div>
+
+    <a th:href="@{/tournaments/add}">
+        Создать турнир
+    </a>
+
     <p th:if="${#lists.isEmpty(tournaments)}">
         Турниры пока не добавлены.
     </p>
+
+    <div th:if="${successMessage}"
+         th:text="${successMessage}"
+         role="status">
+    </div>
 </main>
 <footer th:replace="~{fragments/footer}"></footer>
 </body>

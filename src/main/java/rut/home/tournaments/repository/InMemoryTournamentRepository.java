@@ -58,9 +58,9 @@ public class InMemoryTournamentRepository implements TournamentRepository {
     }
 
     @Override
-    public boolean existsByName(String name) {
+    public boolean existsByName(String title) {
         return tournaments.stream()
-                .anyMatch(tournament -> tournament.title().equals(name));
+                .anyMatch(tournament -> tournament.title().equals(title));
     }
 
     @Override
@@ -78,5 +78,16 @@ public class InMemoryTournamentRepository implements TournamentRepository {
         }
 
         throw new TournamentNotFoundException(originalTitle);
+    }
+
+    @Override
+    public void delete(String title) {
+        boolean removed = tournaments.removeIf(
+                tournament -> tournament.title().equals(title)
+        );
+
+        if (!removed) {
+            throw new TournamentNotFoundException(title);
+        }
     }
 }
