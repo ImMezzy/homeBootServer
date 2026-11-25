@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head}"></head>
+<body>
+<header th:replace="~{fragments/navbar}"></header>
+<main id="main-content" class="container">
+    <h1>Добавить игрока</h1>
+    <form class="stack" th:action="@{/players/add}" method="post" th:object="${playerModel}" novalidate>
+        <div role="alert" th:if="${#fields.hasAnyErrors()}">Исправьте отмеченные поля.</div>
+        <div role="alert" th:if="${#fields.hasGlobalErrors()}" th:errors="*{global}">Ошибка сохранения</div>
+        <label for="username">Юзернейм
+            <input id="username" type="text" th:field="*{username}" maxlength="100" required
+                   th:attr="aria-invalid=${#fields.hasErrors('username')}">
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Ошибка юзернейма</span>
+        </label>
+        <label for="rating">Рейтинг
+            <input id="rating" type="number" th:field="*{rating}" min="0" required
+                   th:attr="aria-invalid=${#fields.hasErrors('rating')}">
+            <span th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}">Ошибка рейтинга</span>
+        </label>
+        <label for="tournamentTitle">Турнир
+            <select id="tournamentTitle" th:field="*{tournamentTitle}" required
+                    th:attr="aria-invalid=${#fields.hasErrors('tournamentTitle')}">
+                <option value="">Выберите турнир</option>
+                <option th:each="tournament : ${tournaments}" th:value="${tournament.title}"
+                        th:text="${tournament.title}">Название турнира</option>
+            </select>
+            <span th:if="${#fields.hasErrors('tournamentTitle')}" th:errors="*{tournamentTitle}">Ошибка турнира</span>
+        </label>
+        <p th:if="${#lists.isEmpty(tournaments)}">Сначала <a th:href="@{/tournaments/add}">создайте турнир</a>.</p>
+        <button type="submit" th:disabled="${#lists.isEmpty(tournaments)}">Добавить игрока</button>
+    </form>
+    <a th:href="@{/players}">Вернуться к списку игроков</a>
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>

@@ -2,67 +2,72 @@ package rut.home.tournaments.dto;
 
 import jakarta.validation.constraints.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class AddTournamentDto {
     @NotBlank(message = "Введите название турнира")
     @Size(max = 100, message = "Не более 100 символов")
     private String title;
 
+    @NotBlank(message = "Введите описание турнира")
+    @Size(max = 2000, message = "Не более 2000 символов")
+    private String description;
+
     @NotNull(message = "Введите максимальное количество участников")
     @Min(value = 2, message = "От 2-ух участников")
     @Max(value = 64, message = "До 64 участников")
-    private Integer maxParticipants;
+    private Integer maxPlayers;
 
     @NotNull(message = "Введите призовой фонд")
-    @Min(value = 1000, message = "От 1000 рублей")
-    @Max(value = 100000000, message = "До 100000000 рублей")
-    private Integer prizeFund;
+    @DecimalMin(value = "1000.00", message = "От 1000 рублей")
+    @DecimalMax(value = "100000000.00", message = "До 100000000 рублей")
+    @Digits(integer = 9, fraction = 2, message = "Не более двух знаков после запятой")
+    private BigDecimal prizeFund;
 
     @NotNull(message = "Введите дату и время начала")
-    private LocalDateTime dateTime;
-
-    @NotBlank(message = "Введите место проведения")
-    @Size(max = 100, message = "Не более 100 символов")
-    private String location;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime startsAt;
 
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title == null ? null : title.trim();
     }
 
-    public Integer getMaxParticipants() {
-        return maxParticipants;
+    public String getDescription() {
+        return description;
     }
 
-    public void setMaxParticipants(Integer maxParticipants) {
-        this.maxParticipants = maxParticipants;
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 
-    public Integer getPrizeFund() {
+    public Integer getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public void setMaxPlayers(Integer maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
+    public BigDecimal getPrizeFund() {
         return prizeFund;
     }
 
-    public void setPrizeFund(Integer prizeFund) {
+    public void setPrizeFund(BigDecimal prizeFund) {
         this.prizeFund = prizeFund;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getStartsAt() {
+        return startsAt;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setStartsAt(LocalDateTime dateTime) {
+        this.startsAt = dateTime;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
 }

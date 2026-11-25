@@ -1,22 +1,38 @@
 package rut.home.tournaments.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import rut.home.tournaments.dto.AddTournamentDto;
-import rut.home.tournaments.model.Tournament;
-import rut.home.tournaments.repository.TournamentRepository;
+import rut.home.tournaments.dto.PageResponse;
+import rut.home.tournaments.dto.TournamentCreateRequest;
+import rut.home.tournaments.dto.TournamentSummary;
+import rut.home.tournaments.models.entities.Tournament;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface TournamentService {
 
-    List<Tournament> getAllTournaments();
+    List<TournamentSummary> allTournaments();
 
-    Tournament tournamentDetails(String tournamentName);
+    TournamentSummary tournamentDetails(String tournamentName);
 
-    Tournament getTournamentByName(String name);
+    TournamentSummary tournamentDetails(UUID id);
 
-    void addTournament(AddTournamentDto source);
+    TournamentSummary addTournament(AddTournamentDto form);
+
+    TournamentSummary updateTournament(UUID id, AddTournamentDto source);
+
+
+
+    Page<TournamentSummary> allTournamentsPaginated(Pageable pageable);
+
+    void addTournaments(List<AddTournamentDto> forms);
 
     void updateTournament(String tournamentTitle, AddTournamentDto source);
 
-    void deleteTournament(String title);
+    void removeTournament(String tournamentTitle);
+
+    void removeTournament(UUID id);
 }

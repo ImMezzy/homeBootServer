@@ -10,6 +10,6 @@ public class HomeController {
     @GetMapping(value = "/", produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String home() {
-        return "Турнирный агрегатор для игры UNO. Откройте /tournaments";
+        return "Каталог киберспортивных турниров. Откройте /tournaments";
     }
 }

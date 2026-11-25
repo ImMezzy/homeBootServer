@@ -1,21 +1,18 @@
 package rut.home.tournaments.repository;
 
-import rut.home.tournaments.model.Tournament;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import rut.home.tournaments.models.entities.Tournament;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface TournamentRepository {
+public interface TournamentRepository extends JpaRepository<Tournament, UUID> {
 
-    List<Tournament> findAll();
+    List<Tournament> findAllByOrderByTitleAsc();
 
-    Optional<Tournament> findByName(String title);
+    Optional<Tournament> findByTitle(String name);
 
-    boolean existsByName(String title);
-
-    void add(Tournament tournament);
-
-    void update(String originalTitle, Tournament updatedTournament);
-
-    void delete(String title);
+    boolean existsByTitleIgnoreCase(String title);
 }

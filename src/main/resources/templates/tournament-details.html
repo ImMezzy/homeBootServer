@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head}"></head>
+<body>
+<header th:replace="~{fragments/navbar}"></header>
+<main id="main-content" class="container">
+    <article class="card">
+        <h1 th:text="${tournamentDetails.title}">
+            Название турнира
+        </h1>
+        <p th:text="${tournamentDetails.description}">
+            Полное описание турнира
+        </p>
+        <p>
+            <strong>Максимум участников:</strong>
+            <span th:text="${tournamentDetails.maxPlayers}">
+                0
+            </span>
+        </p>
+        <p>
+            <strong>Количество участников</strong>
+            <span th:text="${tournamentDetails.playerCount}"></span>
+        </p>
+        <p>
+            <strong>Призовой фонд:</strong>
+            <span th:text="|${tournamentDetails.prizeFund} ₽|">
+                0 ₽
+            </span>
+        </p>
+        <p>
+            <strong>Дата и время начала (UTC):</strong>
+            <span th:text="${tournamentDetails.startsAt}">2027-06-15T15:00:00Z</span>
+        </p>
+        <p>
+            <strong>Статус:</strong>
+            <span th:text="${tournamentDetails.status != null ? tournamentDetails.status.status : 'Не указан'}">
+                Статус регистрации
+            </span>
+        </p>
+    </article>
+    <a th:href="@{/tournaments}">
+        Вернуться к списку турниров
+    </a>
+    <a th:href="@{/tournaments/{title}/edit(title=${tournamentDetails.title})}">
+        Редактировать
+    </a>
+    <form th:action="@{/tournaments/{title}/delete(title=${tournamentDetails.title})}"
+          method="post">
+        <button type="submit">Удалить турнир</button>
+    </form>
+
+    <div th:if="${successMessage}"
+         th:text="${successMessage}"
+         role="status">
+    </div>
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>
